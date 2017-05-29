@@ -35,7 +35,8 @@ LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libminijail \
     libutils \
-    libwifi-system
+    libwifi-system \
+    libqsap_sdk
 LOCAL_STATIC_LIBRARIES := \
     libwificond
 include $(BUILD_EXECUTABLE)
@@ -47,6 +48,9 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := libwificond
 LOCAL_CPPFLAGS := $(wificond_cpp_flags)
 LOCAL_C_INCLUDES := $(wificond_includes)
+ifeq ($(BOARD_HAS_QCOM_WLAN), true)
+  LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/sdk/softap/include
+endif
 LOCAL_SRC_FILES := \
     ap_interface_binder.cpp \
     ap_interface_impl.cpp \
@@ -68,7 +72,9 @@ LOCAL_SRC_FILES := \
 LOCAL_SHARED_LIBRARIES := \
     libbase \
     libutils \
-    libwifi-system
+    libwifi-system \
+    libnl \
+    libqsap_sdk
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     libwificond_ipc \
     libwificond_nl
@@ -173,7 +179,8 @@ LOCAL_SHARED_LIBRARIES := \
     libbinder \
     liblog \
     libutils \
-    libwifi-system
+    libwifi-system \
+    libqsap_sdk
 include $(BUILD_NATIVE_TEST)
 
 ###
