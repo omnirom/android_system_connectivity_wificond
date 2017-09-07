@@ -148,12 +148,24 @@ bool NetlinkUtils::GetInterfaces(uint32_t wiphy_index,
       LOG(WARNING) << "Failed to get interface name";
       continue;
     }
-
     vector<uint8_t> if_mac_addr;
+
+#ifdef CONFIG_NO_NL80211_ATTR_MAC
+    LOG(WARNING) << "Using default mac address";
+    // TODO could read from property
+    // see nl80211_send_iface
+    if_mac_addr.push_back(0x02);
+    if_mac_addr.push_back(0x00);
+    if_mac_addr.push_back(0x00);
+    if_mac_addr.push_back(0x00);
+    if_mac_addr.push_back(0x00);
+    if_mac_addr.push_back(0x00);
+#else
     if (!packet->GetAttributeValue(NL80211_ATTR_MAC, &if_mac_addr)) {
       LOG(WARNING) << "Failed to get interface mac address";
       continue;
     }
+#endif
 
     interface_info->emplace_back(if_index, if_name, if_mac_addr);
   }
