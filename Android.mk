@@ -18,6 +18,9 @@ wificond_parent_dir := $(LOCAL_PATH)/../
 wificond_includes := \
     $(wificond_parent_dir)
 
+ifeq ($(TARGET_KERNEL_NO_NL80211_ATTR_MAC),true)
+LOCAL_CPPFLAGS += -DCONFIG_NO_NL80211_ATTR_MAC
+endif
 
 ###
 ### wificond daemon.
